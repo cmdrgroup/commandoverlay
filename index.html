@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Command Overlay — The Operational Layer Your Business Is Missing</title>
+<meta name="description" content="Playbook tracking, SOP management, coaching logs, and accountability — layered on top of your existing systems. Built by CMDR Group." />
+<link rel="icon" href="assets/favicon.ico" />
+<link rel="stylesheet" href="colors_and_type.css" />
+<style>
+  html, body, #root { margin: 0; }
+  body {
+    background: var(--command-black);
+    overflow-x: hidden;
+  }
+  * { box-sizing: border-box; }
+  button:focus-visible { outline: 2px solid var(--command-gold); outline-offset: 2px; }
+  em { font-style: italic; }
+
+  /* Topographic SVG background — used across sections */
+  .topo-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.18;
+    background-image:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='800' viewBox='0 0 800 800'><g fill='none' stroke='%23C4A04F' stroke-width='0.6' opacity='0.9'><path d='M -100 220 Q 120 180 260 240 T 560 200 T 900 260'/><path d='M -100 280 Q 140 240 300 300 T 600 260 T 900 320'/><path d='M -100 340 Q 160 300 320 360 T 640 320 T 900 380'/><path d='M -100 400 Q 180 360 360 420 T 660 380 T 900 440'/><path d='M -100 460 Q 200 420 380 480 T 680 440 T 900 500'/><path d='M -100 520 Q 220 480 400 540 T 700 500 T 900 560'/><path d='M -100 580 Q 240 540 420 600 T 720 560 T 900 620'/><path d='M -100 640 Q 260 600 440 660 T 740 620 T 900 680'/></g><g fill='%23C4A04F' opacity='0.5'><circle cx='220' cy='300' r='1.2'/><circle cx='460' cy='360' r='1.2'/><circle cx='680' cy='420' r='1.2'/><circle cx='320' cy='520' r='1.2'/><circle cx='580' cy='580' r='1.2'/></g><g fill='none' stroke='%23C4A04F' stroke-width='0.4' opacity='0.35'><path d='M 0 0 L 800 800 M 200 0 L 800 600 M 400 0 L 800 400 M 600 0 L 800 200 M 0 200 L 600 800 M 0 400 L 400 800 M 0 600 L 200 800'/></g></svg>");
+    background-size: 800px 800px;
+    background-repeat: repeat;
+  }
+
+  /* Grid overlay for hero */
+  .grid-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.14;
+    background-image:
+      linear-gradient(var(--gunmetal) 1px, transparent 1px),
+      linear-gradient(90deg, var(--gunmetal) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 85%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 85%);
+  }
+
+  /* Hide topo when disabled */
+  body.topo-off .topo-bg, body.topo-off .grid-bg { display: none; }
+  body.strip-off .cmdr-classified-strip { display: none; }
+
+  /* Fade-in on scroll */
+  .reveal { opacity: 0; transform: translateY(16px); transition: opacity 600ms var(--ease-out), transform 600ms var(--ease-out); }
+  .reveal.in { opacity: 1; transform: none; }
+
+  /* Scanline animation for live-demo map */
+  @keyframes scan {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100vh); }
+  }
+  @keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0.2; } }
+  @keyframes pulse-dot { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.7); } }
+
+  /* Mobile */
+  @media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr !important; gap: 32px !important; padding-top: 100px !important; }
+    .hide-mobile { display: none !important; }
+  }
+  @media (max-width: 768px) {
+    .hero-h1 { font-size: 38px !important; }
+    .sec-h { font-size: 26px !important; }
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<div class="cmdr-noise-overlay"></div>
+
+<template id="__bundler_thumbnail" data-bg-color="#0A0A0A">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#0A0A0A"/>
+    <g stroke="#C4A04F" stroke-width="1.2" fill="none" opacity="0.35">
+      <path d="M 100 340 Q 350 300 550 360 T 950 320 T 1150 380"/>
+      <path d="M 100 400 Q 350 360 550 420 T 950 380 T 1150 440"/>
+      <path d="M 100 460 Q 350 420 550 480 T 950 440 T 1150 500"/>
+    </g>
+    <g transform="translate(600 400)">
+      <rect x="-120" y="-120" width="180" height="180" stroke="#8B8B90" stroke-width="3" fill="none"/>
+      <rect x="-60" y="-60" width="180" height="180" stroke="#C4A04F" stroke-width="3" fill="rgba(196,160,79,0.08)"/>
+      <circle cx="30" cy="30" r="6" fill="#C4A04F"/>
+    </g>
+    <text x="600" y="640" text-anchor="middle" font-family="monospace" font-size="22" fill="#C4A04F" letter-spacing="6">COMMAND OVERLAY</text>
+  </svg>
+</template>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="src/Buttons.jsx"></script>
+<script type="text/babel" src="src/Primitives.jsx"></script>
+<script type="text/babel" src="src/Hero.jsx"></script>
+<script type="text/babel" src="src/Problem.jsx"></script>
+<script type="text/babel" src="src/OverlayDemo.jsx"></script>
+<script type="text/babel" src="src/VideoBrief.jsx"></script>
+<script type="text/babel" src="src/SopMachine.jsx"></script>
+<script type="text/babel" src="src/Deliverables.jsx"></script>
+<script type="text/babel" src="src/Tiers.jsx"></script>
+<script type="text/babel" src="src/Transformation.jsx"></script>
+<script type="text/babel" src="src/About.jsx"></script>
+<script type="text/babel" src="src/FinalCTA.jsx"></script>
+<script type="text/babel" src="src/Footer.jsx"></script>
+<script type="text/babel" src="src/Tweaks.jsx"></script>
+
+<script type="text/babel" data-presets="react">
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "topoBackground": false,
+  "classifiedStrip": false
+}/*EDITMODE-END*/;
+
+function App() {
+  const tweaks = TWEAK_DEFAULTS;
+
+  // Apply tweaks to body classes
+  React.useEffect(() => {
+    document.body.classList.toggle('topo-off', !tweaks.topoBackground);
+    document.body.classList.toggle('strip-off', !tweaks.classifiedStrip);
+  }, []);
+
+  // Scroll reveal
+  React.useEffect(() => {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(en => { if (en.isIntersecting) en.target.classList.add('in'); });
+    }, { threshold: 0.08, rootMargin: '0px 0px -10% 0px' });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+
+  const scrollTo = (id) => {
+    const el = document.getElementById(id);
+    if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 20, behavior: 'smooth' });
+  };
+
+  return (
+    <div>
+      {tweaks.classifiedStrip && (
+        <div className="cmdr-classified-strip" style={{ position: 'sticky', top: 0, zIndex: 40 }}>
+          ⬛ CLASSIFIED — COMMAND OVERLAY — OPERATIONAL BRIEF
+        </div>
+      )}
+      <SiteNav onScrollTo={scrollTo} />
+      <Hero onScrollTo={scrollTo} />
+      <Problem />
+      <OverlayDemo />
+      <VideoBrief />
+      <SopMachine />
+      <Deliverables />
+      <Tiers />
+      <Transformation />
+      <About />
+      <FinalCTA />
+      <SiteFooter />
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

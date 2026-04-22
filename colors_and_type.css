@@ -1,0 +1,190 @@
+/* =============================================================================
+   CMDR GROUP — Colors & Type Tokens
+   Source of truth for any design built under this system.
+
+   Mirrors the HSL tokens defined in the COMDBRIEF codebase
+   (src/index.css + tailwind.config.ts) with a few additions for prototyping.
+   ============================================================================= */
+
+/* Fonts — loaded from Google Fonts. If offline, substitute via @font-face
+   against /fonts once files are on disk. */
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Barlow:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  /* -- RAW BRAND PALETTE -------------------------------------------------- */
+  /* Neutrals — graded from the operations-centre deep matte black upward.   */
+  --command-black:  hsl(0 0% 4%);      /* page background — near-pure black */
+  --tactical-steel: hsl(240 3% 12%);   /* card / panel fill                 */
+  --gunmetal:       hsl(240 2% 18%);   /* borders, dividers, input chrome  */
+  --slate-grey:     hsl(240 4% 56%);   /* muted labels, secondary text     */
+  --steel-white:    hsl(240 6% 90%);   /* primary foreground               */
+
+  /* Accents — restrained, high-contrast. Use sparingly for authority.      */
+  --command-gold:   hsl(43 49% 54%);   /* primary accent — rank, progress, emphasis */
+  --warning-red:    hsl(4 63% 46%);    /* destructive / warning / "commence" CTA    */
+  --field-green:    hsl(101 52% 20%);  /* success state only. never decorative.     */
+
+  /* -- SEMANTIC TOKENS (shadcn-compatible) -------------------------------- */
+  --background:             var(--command-black);
+  --foreground:             var(--steel-white);
+
+  --card:                   var(--tactical-steel);
+  --card-foreground:        var(--steel-white);
+  --popover:                var(--tactical-steel);
+  --popover-foreground:     var(--steel-white);
+
+  --primary:                var(--command-gold);
+  --primary-foreground:     var(--command-black);
+  --secondary:              var(--gunmetal);
+  --secondary-foreground:   var(--steel-white);
+  --muted:                  var(--gunmetal);
+  --muted-foreground:       var(--slate-grey);
+  --accent:                 var(--gunmetal);
+  --accent-foreground:      var(--steel-white);
+  --destructive:            var(--warning-red);
+  --destructive-foreground: var(--steel-white);
+
+  --border:                 hsl(240 2% 22%);
+  --input:                  hsl(240 2% 22%);
+  --ring:                   var(--command-gold);
+
+  /* -- TYPE ---------------------------------------------------------------- */
+  --font-heading: 'Barlow Condensed', 'Oswald', 'Impact', sans-serif;
+  --font-body:    'Barlow', 'Inter', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace;
+
+  /* Scale — tight, utilitarian. All headings UPPERCASE with wide tracking. */
+  --fs-display:   2.5rem;     /* 40px — hero page titles                   */
+  --fs-h1:        1.875rem;   /* 30px — section tops                       */
+  --fs-h2:        1.5rem;     /* 24px — page headers                       */
+  --fs-h3:        1.125rem;   /* 18px — card titles                        */
+  --fs-body:      0.875rem;   /* 14px — running copy                       */
+  --fs-small:     0.75rem;    /* 12px — classified-strip / mono labels     */
+  --fs-micro:     0.625rem;   /* 10px — data strips, cell chrome           */
+
+  --tracking-widest:  0.2em;
+  --tracking-wider:   0.15em;
+  --tracking-wide:    0.1em;
+
+  /* -- SPACING / RADII / SHADOWS ------------------------------------------ */
+  --radius:       0.375rem;    /* 6px — shadcn default "lg"                */
+  --radius-sm:    0.125rem;    /* 2px                                       */
+  --radius-md:    0.25rem;     /* 4px                                       */
+  --radius-full:  9999px;
+
+  /* Sharp, matte. No glow. Elevation is earned with borders, not shadows. */
+  --shadow-sm:  0 1px 0 0 hsl(0 0% 0% / 0.4);
+  --shadow-md:  0 2px 8px -2px hsl(0 0% 0% / 0.6);
+  --shadow-lg:  0 12px 32px -8px hsl(0 0% 0% / 0.7);
+
+  /* Motion — curt. Nothing bounces. */
+  --ease-out:   cubic-bezier(0.2, 0.8, 0.2, 1);
+  --dur-fast:   150ms;
+  --dur-base:   250ms;
+  --dur-slow:   400ms;
+}
+
+/* =============================================================================
+   SEMANTIC TYPE — use these directly on raw HTML; they apply the brand rules.
+   ============================================================================= */
+
+html, body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6, .cmdr-heading {
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  font-weight: 700;
+  color: var(--steel-white);
+  margin: 0;
+}
+
+h1 { font-size: var(--fs-display); letter-spacing: var(--tracking-wider); }
+h2 { font-size: var(--fs-h1); }
+h3 { font-size: var(--fs-h2); }
+h4 { font-size: var(--fs-h3); letter-spacing: var(--tracking-wide); }
+
+p { margin: 0 0 1em; color: var(--steel-white); opacity: 0.85; }
+
+code, kbd, .cmdr-mono {
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  letter-spacing: var(--tracking-wide);
+}
+
+/* Utility classes — mono label / data-strip pattern used throughout the UI */
+.cmdr-label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-widest);
+  color: var(--slate-grey);
+}
+
+.cmdr-step-label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  color: var(--slate-grey);
+}
+
+/* Section header — the red bar + uppercase title pattern */
+.cmdr-section-header {
+  font-family: var(--font-heading);
+  font-size: var(--fs-h1);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-widest);
+  color: var(--steel-white);
+}
+.cmdr-section-header::before {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: var(--warning-red);
+  margin-bottom: 1rem;
+}
+
+/* Classified strip — the tactical-steel header bar at the top of every screen */
+.cmdr-classified-strip {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-widest);
+  background: var(--tactical-steel);
+  color: var(--slate-grey);
+  border-bottom: 1px solid var(--gunmetal);
+}
+
+/* Directive card — standard panel */
+.cmdr-directive-card {
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  background: var(--tactical-steel);
+  border: 1px solid var(--gunmetal);
+}
+.cmdr-directive-card--danger {
+  border-left: 3px solid var(--warning-red);
+}
+
+/* Fine-grain film grain — applied as a fixed overlay on full-page views */
+.cmdr-noise-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+}
