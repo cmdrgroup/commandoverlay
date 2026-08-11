@@ -17,7 +17,7 @@ function SiteFooter() {
           </div>
           <div style={{ display: 'flex', gap: 40, flexWrap: 'wrap' }}>
             <FooterCol title="Platform" items={[['Overview', '#overlay'], ['SOP Machine', '#sop'], ['Tiers', '#tiers']]} />
-            <FooterCol title="CMDR Group" items={[['Letter', 'https://cmdr.group'], ['Command Room', '#'], ["Captain's Table", '#']]} />
+            <FooterCol title="CMDR Group" items={[['Letter', 'https://cmdr.group'], ['Command Room', 'https://cmdrgroup.com'], ["Captain's Table", 'https://cmdrgroup.com']]} />
             <FooterCol title="Contact" items={[['Book a call', '#cta'], ['curtis@cmdr.group', 'mailto:curtis@cmdr.group']]} />
           </div>
         </div>
