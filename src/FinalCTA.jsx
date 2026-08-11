@@ -29,7 +29,7 @@ function FinalCTA() {
         </p>
 
         <div className="reveal">
-          <a href="#" style={{ textDecoration: 'none' }}>
+         <a href="https://link.cmdrgroup.com/widget/booking/SIu9xVPcKOKhUSne6hRq" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
             <ButtonBase variant="primary" size="lg" style={{ padding: '22px 56px', fontSize: 16 }}>
               Book a Call →
             </ButtonBase>
